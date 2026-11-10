@@ -3,7 +3,8 @@
 Features:
   - List tasks, filtered by All / Open / Done
   - Add a task
-  - Mark a task complete
+  - Mark a task complete, or click "Done" to move it back to To-Do
+  - Delete a task
   - JSON API at /api/tasks
   - Health check at /health
 
@@ -46,6 +47,11 @@ def _normalize_filter(status: str) -> str:
     return status if status in VALID_FILTERS else "all"
 
 
+def _redirect_home(status: str) -> RedirectResponse:
+    # 303 tells the browser to follow up with a GET, so refreshing won't resubmit the form.
+    return RedirectResponse(f"/?status={_normalize_filter(status)}", status_code=303)
+
+
 # ---------- HTML pages ----------
 
 
@@ -70,14 +76,29 @@ def add_task(title: str = Form(...), status: str = Form("all")):
     title = title.strip()
     if title:
         store.add(title[:200])
-    return RedirectResponse(f"/?status={_normalize_filter(status)}", status_code=303)
+    return _redirect_home(status)
 
 
 @app.post("/tasks/{task_id}/complete")
 def complete_task(task_id: int, status: str = Form("all")):
     if store.complete(task_id) is None:
         raise HTTPException(status_code=404, detail="Task not found")
-    return RedirectResponse(f"/?status={_normalize_filter(status)}", status_code=303)
+    return _redirect_home(status)
+
+
+@app.post("/tasks/{task_id}/reopen")
+def reopen_task(task_id: int, status: str = Form("all")):
+    if store.reopen(task_id) is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return _redirect_home(status)
+
+
+# HTML forms can only send GET or POST, so the page deletes with POST.
+@app.post("/tasks/{task_id}/delete")
+def delete_task(task_id: int, status: str = Form("all")):
+    if not store.delete(task_id):
+        raise HTTPException(status_code=404, detail="Task not found")
+    return _redirect_home(status)
 
 
 # ---------- JSON API ----------
@@ -102,6 +123,20 @@ def api_complete_task(task_id: int):
     if task is None:
         raise HTTPException(status_code=404, detail="Task not found")
     return task.to_dict()
+
+
+@app.post("/api/tasks/{task_id}/reopen")
+def api_reopen_task(task_id: int):
+    task = store.reopen(task_id)
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task.to_dict()
+
+
+@app.delete("/api/tasks/{task_id}", status_code=204)
+def api_delete_task(task_id: int):
+    if not store.delete(task_id):
+        raise HTTPException(status_code=404, detail="Task not found")
 
 
 # ---------- Health ----------

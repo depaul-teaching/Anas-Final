@@ -11,7 +11,7 @@
 
   <main class="container">
     <header>
-      <h1>{{ app_title }}</h1>
+      <h1>{{ "To-Do List" }}</h1>
       <p class="subtitle">IT-390 Final Project &middot; Anas Patel</p>
     </header>
 
@@ -33,14 +33,23 @@
       {% for task in tasks %}
         <li class="task {{ 'done' if task.done else '' }}">
           <span class="title">{{ task.title }}</span>
-          {% if task.done %}
-            <span class="badge">Done</span>
-          {% else %}
-            <form method="post" action="/tasks/{{ task.id }}/complete">
+          <div class="actions">
+            {% if task.done %}
+              <form method="post" action="/tasks/{{ task.id }}/reopen">
+                <input type="hidden" name="status" value="{{ status }}">
+                <button type="submit" class="badge" title="Click to move back to To-Do">Done</button>
+              </form>
+            {% else %}
+              <form method="post" action="/tasks/{{ task.id }}/complete">
+                <input type="hidden" name="status" value="{{ status }}">
+                <button type="submit" class="complete">Mark complete</button>
+              </form>
+            {% endif %}
+            <form method="post" action="/tasks/{{ task.id }}/delete">
               <input type="hidden" name="status" value="{{ status }}">
-              <button type="submit" class="complete">Mark complete</button>
+              <button type="submit" class="delete" title="Delete task">Delete</button>
             </form>
-          {% endif %}
+          </div>
         </li>
       {% else %}
         <li class="empty">No {{ '' if status == 'all' else status }} tasks.</li>

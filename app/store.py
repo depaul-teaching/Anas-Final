@@ -38,6 +38,17 @@ class TaskStore:
                 task.done = True
             return task
 
+    def reopen(self, task_id: int) -> Task | None:
+        with self._lock:
+            task = self._tasks.get(task_id)
+            if task is not None:
+                task.done = False
+            return task
+
+    def delete(self, task_id: int) -> bool:
+        with self._lock:
+            return self._tasks.pop(task_id, None) is not None
+
     def list(self, status: str = "all") -> list[Task]:
         tasks = list(self._tasks.values())
         if status == "open":

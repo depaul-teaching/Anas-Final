@@ -7,7 +7,8 @@ A small to-do app built with Python and FastAPI for IT-390.
 - List tasks
 - Filter tasks by All / Open / Done
 - Add a task
-- Mark a task complete
+- Mark a task complete, or click its green "Done" label to move it back to To-Do
+- Delete a task
 - JSON API at `/api/tasks`
 - Health check at `/health`
 
@@ -52,7 +53,11 @@ APP_TITLE="My Tasks" ENVIRONMENT=staging uvicorn app.main:app
 | GET    | `/`                          | Home page (`?status=all\|open\|done`)         |
 | POST   | `/tasks`                     | Add a task (HTML form)                        |
 | POST   | `/tasks/{id}/complete`       | Mark a task complete (HTML form)              |
+| POST   | `/tasks/{id}/reopen`         | Move a task back to To-Do (HTML form)         |
+| POST   | `/tasks/{id}/delete`         | Delete a task (HTML form)                     |
 | GET    | `/api/tasks`                 | List tasks as JSON (`?status=all\|open\|done`) |
 | POST   | `/api/tasks`                 | Add a task, body: `{"title": "..."}`          |
 | POST   | `/api/tasks/{id}/complete`   | Mark a task complete                          |
+| POST   | `/api/tasks/{id}/reopen`     | Move a task back to To-Do                     |
+| DELETE | `/api/tasks/{id}`            | Delete a task                                 |
 | GET    | `/health`                    | Returns `{"status": "ok"}`                    |

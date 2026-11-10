@@ -43,6 +43,38 @@ def test_complete_missing_task_returns_404():
     assert client.post("/api/tasks/99999/complete").status_code == 404
 
 
+def test_reopen_moves_task_back_to_open():
+    task = client.post("/api/tasks", json={"title": "Reopen me"}).json()
+    client.post(f"/api/tasks/{task['id']}/complete")
+
+    reopened = client.post(f"/api/tasks/{task['id']}/reopen")
+    assert reopened.status_code == 200
+    assert reopened.json()["done"] is False
+
+    open_ids = [t["id"] for t in client.get("/api/tasks?status=open").json()]
+    assert task["id"] in open_ids
+
+
+def test_reopen_missing_task_returns_404():
+    assert client.post("/api/tasks/99999/reopen").status_code == 404
+
+
+def test_delete_task_via_api():
+    task = client.post("/api/tasks", json={"title": "Delete me"}).json()
+
+    assert client.delete(f"/api/tasks/{task['id']}").status_code == 204
+    ids = [t["id"] for t in client.get("/api/tasks").json()]
+    assert task["id"] not in ids
+    assert client.delete(f"/api/tasks/{task['id']}").status_code == 404
+
+
+def test_form_delete_redirects_home():
+    task = client.post("/api/tasks", json={"title": "Form delete target"}).json()
+    response = client.post(f"/tasks/{task['id']}/delete", follow_redirects=False)
+    assert response.status_code == 303
+    assert "Form delete target" not in client.get("/").text
+
+
 def test_form_add_redirects_home():
     response = client.post("/tasks", data={"title": "From the form"}, follow_redirects=False)
     assert response.status_code == 303

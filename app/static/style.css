@@ -75,13 +75,26 @@ button.complete:hover { background: #1e8e4e; }
 }
 .task form { margin: 0; }
 .task.done .title { text-decoration: line-through; color: #9aa5b1; }
-.badge {
-  padding: 4px 8px;
+.actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+/* The "Done" badge is a button: clicking it moves the task back to To-Do. */
+button.badge {
+  padding: 6px 10px;
   border-radius: 4px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   background: #d5f5e3;
   color: #1e8449;
 }
+button.badge:hover { background: #fdebd0; color: #b9770e; }
+
+button.delete {
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  background: transparent;
+  color: #c0392b;
+  border: 1px solid #e6b0aa;
+}
+button.delete:hover { background: #fdedec; }
 .empty { padding: 16px 4px; color: #9aa5b1; }
 
 footer { margin-top: 20px; font-size: 0.85rem; color: #7b8794; }
