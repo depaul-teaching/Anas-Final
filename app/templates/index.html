@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ app_title }}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="env-banner env-{{ environment | lower }}">Environment: {{ environment }}</div>
+
+  <main class="container">
+    <header>
+      <h1>{{ app_title }}</h1>
+      <p class="subtitle">IT-390 Final Project &middot; Anas Patel</p>
+    </header>
+
+    <form class="add-form" method="post" action="/tasks">
+      <input type="hidden" name="status" value="{{ status }}">
+      <input type="text" name="title" placeholder="What needs to be done?" maxlength="200" required autofocus>
+      <button type="submit">Add task</button>
+    </form>
+
+    <nav class="filters">
+      {% for name, label in [("all", "All"), ("open", "Open"), ("done", "Done")] %}
+        <a href="/?status={{ name }}" class="{{ 'active' if status == name else '' }}">
+          {{ label }} <span class="count">{{ counts[name] }}</span>
+        </a>
+      {% endfor %}
+    </nav>
+
+    <ul class="tasks">
+      {% for task in tasks %}
+        <li class="task {{ 'done' if task.done else '' }}">
+          <span class="title">{{ task.title }}</span>
+          {% if task.done %}
+            <span class="badge">Done</span>
+          {% else %}
+            <form method="post" action="/tasks/{{ task.id }}/complete">
+              <input type="hidden" name="status" value="{{ status }}">
+              <button type="submit" class="complete">Mark complete</button>
+            </form>
+          {% endif %}
+        </li>
+      {% else %}
+        <li class="empty">No {{ '' if status == 'all' else status }} tasks.</li>
+      {% endfor %}
+    </ul>
+
+    <footer>
+      <a href="/api/tasks">/api/tasks</a> &middot; <a href="/health">/health</a>
+    </footer>
+  </main>
+</body>
+</html>

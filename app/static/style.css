@@ -1,0 +1,88 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #f4f5f7;
+  color: #1f2933;
+}
+
+.env-banner {
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #fff;
+  background: #52606d;
+}
+.env-banner.env-production { background: #c0392b; }
+.env-banner.env-staging    { background: #d68910; }
+.env-banner.env-kubernetes { background: #2e86c1; }
+.env-banner.env-docker     { background: #1d6fa5; }
+
+.container {
+  max-width: 640px;
+  margin: 32px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+h1 { margin: 0; font-size: 1.8rem; }
+.subtitle { margin: 4px 0 20px; color: #7b8794; }
+
+.add-form { display: flex; gap: 8px; margin-bottom: 16px; }
+.add-form input[type="text"] {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #cbd2d9;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #2f80ed;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+button:hover { background: #1c6dd0; }
+button.complete { padding: 6px 10px; font-size: 0.85rem; background: #27ae60; }
+button.complete:hover { background: #1e8e4e; }
+
+.filters { display: flex; gap: 6px; margin-bottom: 12px; }
+.filters a {
+  padding: 6px 12px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #3e4c59;
+  background: #e4e7eb;
+}
+.filters a.active { background: #2f80ed; color: #fff; }
+.count { font-size: 0.8rem; opacity: 0.8; }
+
+.tasks { list-style: none; margin: 0; padding: 0; }
+.task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 4px;
+  border-bottom: 1px solid #e4e7eb;
+}
+.task form { margin: 0; }
+.task.done .title { text-decoration: line-through; color: #9aa5b1; }
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  background: #d5f5e3;
+  color: #1e8449;
+}
+.empty { padding: 16px 4px; color: #9aa5b1; }
+
+footer { margin-top: 20px; font-size: 0.85rem; color: #7b8794; }
+footer a { color: #2f80ed; }
