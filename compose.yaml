@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:- compose}
+      APP_TITLE: ${APP_TITLE:- Anas Task Tracker}
+  
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+      
