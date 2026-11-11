@@ -37,7 +37,7 @@ pytest
 
 | Variable      | Default             | What it does                          |
 |---------------|---------------------|---------------------------------------|
-| `APP_TITLE`   | `Anas's To-Do List` | Page heading and browser tab title    |
+| `APP_TITLE`   | `Anas's To-Do List` | Browser tab title    |
 | `ENVIRONMENT` | `local`             | Shown in the banner at the top        |
 
 Example:
