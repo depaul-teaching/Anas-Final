@@ -33,11 +33,27 @@ Run the tests:
 pytest
 ```
 
+## Run with Docker
+
+Build the image:
+
+```bash
+docker build -t task-tracker:dev .
+```
+
+Run it:
+
+```bash
+docker run --rm -p 8000:8000 -e ENVIRONMENT=docker -e APP_TITLE="Anas Task Tracker" task-tracker:dev
+```
+
+Open http://localhost:8000. Check health with `curl -i http://localhost:8000/health`.
+
 ## Environment variables
 
 | Variable      | Default             | What it does                          |
 |---------------|---------------------|---------------------------------------|
-| `APP_TITLE`   | `Anas's To-Do List` | Page heading and browser tab title    |
+| `APP_TITLE`   | `Anas's To-Do List` | Browser tab title    |
 | `ENVIRONMENT` | `local`             | Shown in the banner at the top        |
 
 Example:
