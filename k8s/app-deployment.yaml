@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+      labels:
+        app: app
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/depaul-teaching/anas-final:sha-d472aa2
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ENVIRONMENT
+              value: kubernetes
+            - name: APP_TITLE
+              value: Anas Task Tracker
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
